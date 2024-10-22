@@ -3,24 +3,26 @@ version: "3"
 services:
   origin:
     hostname: origin
-    build: ./basics
-    image: debian
+    build: ./basics/origin
     container_name: origin
     tty: true
     cap_add:
       - ALL
+    networks:
+      net-10.8.0.0:
+        ipv4_address: 10.8.0.4
     privileged: true
-    volumes:
-      - ./volumes:/volumes
 
   fw:
     hostname: fw
-    image: debian
+    build: ./basics/fw
     container_name: fw
     tty: true
     cap_add:
       - ALL
     networks:
+      net-10.8.0.0:
+        ipv4_address: 10.8.0.5
       net-10.9.0.0:
         ipv4_address: 10.9.0.5
     privileged: true
@@ -38,7 +40,21 @@ services:
 
 networks:
   net-10.9.0.0:
+    driver:
+      bridge
     name: net-10.9.0.0
     ipam:
       config:
         - subnet: 10.9.0.0/24
+    driver_opts:
+      com.docker.network.bridge.name: origin
+  
+  net-10.8.0.0:
+    driver:
+      bridge
+    name: net-10.8.0.0
+    ipam:
+      config:
+        - subnet: 10.8.0.0/24
+    driver_opts:
+      com.docker.network.bridge.name: destiny
