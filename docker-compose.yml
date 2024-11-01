@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   origin:
     hostname: origin
@@ -29,7 +27,7 @@ services:
 
   destiny:
     hostname: destiny
-    image: debian
+    build: ./basics/destiny
     container_name: destiny
     tty: true
     cap_add:
