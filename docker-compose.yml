@@ -16,6 +16,11 @@ services:
     build: ./basics/fw
     container_name: fw
     tty: true
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/root/fwmanager/run-tests:/root/run-tests:rw"
+      - "/root/.bashrc:/root/.bashrc:rw"
     cap_add:
       - ALL
     networks:
@@ -36,23 +41,19 @@ services:
       net-10.9.0.0:
         ipv4_address: 10.9.0.6
 
-networks:
-  net-10.9.0.0:
-    driver:
-      bridge
-    name: net-10.9.0.0
-    ipam:
-      config:
-        - subnet: 10.9.0.0/24
-    driver_opts:
-      com.docker.network.bridge.name: origin
-  
+networks:  
   net-10.8.0.0:
-    driver:
-      bridge
     name: net-10.8.0.0
     ipam:
       config:
         - subnet: 10.8.0.0/24
+    driver_opts:
+      com.docker.network.bridge.name: origin
+
+  net-10.9.0.0:
+    name: net-10.9.0.0
+    ipam:
+      config:
+        - subnet: 10.9.0.0/24
     driver_opts:
       com.docker.network.bridge.name: destiny
